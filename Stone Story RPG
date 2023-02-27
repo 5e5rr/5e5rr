@@ -1,0 +1,136 @@
+>( OwO
+>`0,14,#00ff00,
+^__\n
+^_ \ \n
+^/o/\n
+^\ \ \n
+^/o/\n
+^\ \ \n
+^/ /\n
+^\o\ \n
+^/ /\n
+^\ \ __\n
+^ \o: -`.\n
+^  ‾‾`--'  
+var hpBar hpBar = ＂＂
+var hpBack hpBack = maxhp / 10
+?foe.distance < 40
+ for i = 1..9
+  ?hp >= hpBack * i
+   ?hpBack * i <= hpBack
+    hpBar = ＂__.＂
+   :
+    hpBar = hpBar + ＂─＂
+  ?(hpBack * (i + 1)) > maxhp
+   i = 10
+ >`5,24,#ff0000,ʘ##@hpBar@<
+import Cosmetics/WavyScarf
+var mind mind = item.GetCooldown(＂mind＂)
+var dash dash = item.GetCooldown(＂dash＂)
+var bash bash = item.GetCooldown(＂bash＂)
+var mask mask = item.GetCooldown(＂mask＂)
+var blade blade = item.GetCooldown(＂blade＂)
+var bar bar = item.GetCooldown(＂bardiche＂)
+var qua qua = item.GetCooldown(＂quarterstaff＂)
+var arm arm = item.GetCooldown(＂skeleton_arm＂)
+>`4,15,#ff00ff,
+^(:)  @dash@\n
+^(>>  @bash@\n
+^((｝  @mask@\n
+^［¤］  @mind@\n
+^‾)_\ @bar@\n
+^---· @qua@\n
+^~~~≡ @arm@\n
+^-|== @blade@
+?hp + armor <= foe.damage
+ activate P
+?foe ! phase
+ bblade()
+ equipL Ice Sword *10
+ equipR Ice Shield *10
+// aarm()
+:?foe = boss
+ mmask()
+ equipL Vigor Sword *10
+ equipR Ice Sword *10
+// bbar()
+ ddebuff()
+sprint()
+qqua()
+walk()
+func bbar()
+ ?bar < 1 | bar > 877
+  ?foe.distance < 11
+   equip Bardiche *10
+   activate R
+func qqua()
+ ?qua < 1
+  ?foe.distance < 7
+   equip Quarterstaff *10
+   activate R
+func ddebuff()
+ ?foe.debuffs.count < 1
+  equipL Ice Sword *10
+  equipR Compound Shield *10
+func aarm()
+ ?arm < 1 & foe.distance < 7
+  equip Skeleton Arm *10
+  ?string.IndexOf
+  ^(buffs.string, ＂pick_pocket:6＂) > 0
+   activate R
+func mmask()
+ ?mask < 1 & foe.distance < 35
+  equipR Cultist Mask *10
+  activate R
+func bblade()
+ ?blade < 1 & foe.distance < 35
+  screen.Next()
+  ?screen.x > (69 * (screen.i + 1) - 10)
+   equip Blade of the Fallen God *10
+   activate R
+   screen.ResetOffset()
+func mmind()
+ ?mind < 1
+  equipL Mind Stone
+func sprint()
+ ?foe.distance > 11 & foe.distance < 17
+  ?bash < 1
+   equipR Bashing Shield *10
+  :?dash < 1
+    equipR Dashing Shield *10
+func walk()
+ ?foe.distance > 17
+  equipL triskelion 
+  equipR Ice Shield *10
+  ?pickup.distance < 10
+   equipL star
+func printbuff(string)
+ var aux = ＂＂
+ var aux2 = string
+ aux = string.Sub
+ ^(aux2, 0, string.IndexOf(aux2, ＂:＂))
+ aux2 = string.Sub
+ ^(aux2, string.IndexOf(aux2, ＂:＂)+1)
+ aux2 = string.Sub
+ ^(aux2, string.IndexOf(aux2, ＂:＂)+1)
+ aux = string.Sub
+ ^(aux2, 0, string.IndexOf(aux2, ＂:＂)) + aux
+ aux2 = string.Sub
+ ^(aux2, string.IndexOf(aux2, ＂:＂)+1)
+ aux = aux + ＂  ＂ + aux2 + ＂  ＂
+ return aux
+func detebuff(string)
+ ?string.Size(string) > 0
+  var aux = ＂＂
+  var aux2 = string
+  var aux3 = ＂＂
+  ?string.IndexOf(aux2, ＂,＂) > -1
+   aux3 = string.Sub
+   ^(aux2, 0, string.IndexOf(aux2, ＂,＂))
+   aux2 = string.Sub
+   ^(aux2, string.IndexOf(aux2, ＂,＂)+1)
+   aux = aux + printbuff(aux3)
+   return aux + detebuff(aux2)
+  :
+   aux = aux + printbuff(aux2)
+   return aux
